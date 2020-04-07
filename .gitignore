@@ -37,3 +37,4 @@ jspm_packages/
 .vscode
 .ds_store
 docs/
+dist/
