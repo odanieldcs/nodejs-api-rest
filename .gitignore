@@ -38,3 +38,5 @@ jspm_packages/
 .ds_store
 docs/
 dist/
+mongo-volume/
+.config/
