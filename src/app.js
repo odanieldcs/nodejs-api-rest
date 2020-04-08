@@ -1,12 +1,10 @@
-import dotenv from 'dotenv';
+import './env';
 import express from 'express';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import routes from './routes';
 
-const prepare = async () => {
-  await dotenv.config();
-
+const prepare = () => {
   const app = express();
 
   app.use(bodyParser.json());
@@ -18,7 +16,7 @@ const prepare = async () => {
 };
 
 export default async () => {
-  const app = await prepare();
+  const app = prepare();
 
   return app;
 };
