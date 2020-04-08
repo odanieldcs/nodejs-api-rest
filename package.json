@@ -9,7 +9,7 @@
   "scripts": {
     "start": "npm run build && node dist/server.js",
     "start:dev": "nodemon --exec babel-node src/server.js",
-    "build": "npm run prepare && babel src --out-dir dist",
+    "build": "babel src --out-dir dist",
     "lint": "eslint src --ext .js",
     "lint:fix": "eslint src --fix --ext .js",
     "prettier": "prettier --check 'src/**/*.js'",
@@ -35,7 +35,8 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "helmet": "^3.22.0"
+    "helmet": "^3.22.0",
+    "mongodb": "^3.5.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
