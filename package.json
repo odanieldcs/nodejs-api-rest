@@ -37,7 +37,7 @@
     "express": "^4.17.1",
     "helmet": "^3.22.0",
     "moment": "^2.24.0",
-    "mongodb": "^3.5.5",
+    "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
     "winston": "^3.2.1"
   },
