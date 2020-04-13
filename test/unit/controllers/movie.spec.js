@@ -121,17 +121,41 @@ describe('Controller: Movie', () => {
 
       sinon.assert.calledWith(response.send);
     });
+
+    it('should return a 422 when an error occurs', async () => {
+      const response = {
+        send: sinon.spy(),
+        status: sinon.stub(),
+      };
+
+      class fakeMovie {
+        save() {}
+      }
+
+      response.status.withArgs(422).returns(response);
+
+      sinon
+        .stub(fakeMovie.prototype, 'save')
+        .withArgs()
+        .rejects({ message: 'Error' });
+
+      const movieController = new MovieController(fakeMovie);
+
+      await movieController.create(defaultMovie, response);
+      sinon.assert.calledWith(response.status, 422);
+    });
   });
 
   describe('update()', () => {
+    const fakeId = 'fake-id';
+    const updatedMovie = {
+      _id: fakeId,
+      name: 'Updated movie',
+      description: 'Updated description',
+      year: 2020,
+    };
+
     it('should respond with 200 when the movie has been updated', async () => {
-      const fakeId = 'fake-id';
-      const updatedMovie = {
-        _id: fakeId,
-        name: 'Updated movie',
-        description: 'Updated description',
-        year: 2020,
-      };
       const request = {
         params: {
           id: fakeId,
@@ -151,10 +175,41 @@ describe('Controller: Movie', () => {
       updateOneStub
         .withArgs({ _id: fakeId }, updatedMovie)
         .resolves(updatedMovie);
+
       const movieController = new MovieController(fakeMovie);
 
       await movieController.update(request, response);
       sinon.assert.calledWith(response.sendStatus, 200);
+    });
+
+    it('should return a 422 when an error occurs', async () => {
+      const request = {
+        params: {
+          id: fakeId,
+        },
+        body: updatedMovie,
+      };
+      const response = {
+        send: sinon.spy(),
+        status: sinon.stub(),
+      };
+
+      class fakeMovie {
+        static updateOne() {}
+      }
+
+      const updateOneStub = sinon.stub(fakeMovie, 'updateOne');
+
+      updateOneStub
+        .withArgs({ _id: fakeId }, updatedMovie)
+        .rejects({ message: 'Error' });
+
+      response.status.withArgs(422).returns(response);
+
+      const movieController = new MovieController(fakeMovie);
+
+      await movieController.update(request, response);
+      sinon.assert.calledWith(response.send, 'Error');
     });
   });
 
@@ -183,6 +238,34 @@ describe('Controller: Movie', () => {
       await movieController.delete(request, response);
 
       sinon.assert.calledWith(response.sendStatus, 204);
+    });
+
+    it('should return a 400 when an error occurs', async () => {
+      const fakeId = 'fake-id';
+      const request = {
+        params: {
+          id: fakeId,
+        },
+      };
+
+      const response = {
+        send: sinon.spy(),
+        status: sinon.stub(),
+      };
+
+      class fakeMovie {
+        static deleteOne() {}
+      }
+
+      const deleteOneStub = sinon.stub(fakeMovie, 'deleteOne');
+
+      deleteOneStub.withArgs({ _id: fakeId }).rejects({ message: 'Error' });
+      response.status.withArgs(400).returns(response);
+
+      const movieController = new MovieController(fakeMovie);
+
+      await movieController.delete(request, response);
+      sinon.assert.calledWith(response.send, 'Error');
     });
   });
 });
