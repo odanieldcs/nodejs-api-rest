@@ -49,7 +49,7 @@ class MovieController {
       await this.Movie.deleteOne({ _id: req.params.id });
       res.sendStatus(204);
     } catch (err) {
-      res.status(422).send(err.message);
+      res.status(400).send(err.message);
     }
   }
 }
