@@ -1,9 +1,7 @@
-import express from 'express';
-import MovieController from '../controllers/movie';
-import Movie from '../models/movie';
+import { Router } from 'express';
+import movieController from '../controllers/movie';
 
-const router = express.Router();
-const movieController = new MovieController(Movie);
+const router = new Router();
 
 router.get('/', (req, res) => movieController.get(req, res));
 router.get('/:id', (req, res) => movieController.getById(req, res));

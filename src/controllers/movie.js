@@ -1,11 +1,9 @@
-class MovieController {
-  constructor(Movie) {
-    this.Movie = Movie;
-  }
+import Movie from '../models/movie';
 
+class MovieController {
   async get(req, res) {
     try {
-      const movies = await this.Movie.find({});
+      const movies = await Movie.find({});
       res.send(movies);
     } catch (err) {
       res.status(400).send(err.message);
@@ -18,7 +16,7 @@ class MovieController {
         params: { id },
       } = req;
 
-      const movie = await this.Movie.find({ _id: id });
+      const movie = await Movie.find({ _id: id });
       res.send(movie);
     } catch (err) {
       res.status(400).send(err.message);
@@ -26,7 +24,7 @@ class MovieController {
   }
 
   async create(req, res) {
-    const movie = new this.Movie(req.body);
+    const movie = new Movie(req.body);
     try {
       await movie.save();
       res.status(201).send(movie);
@@ -37,7 +35,7 @@ class MovieController {
 
   async update(req, res) {
     try {
-      await this.Movie.updateOne({ _id: req.params.id }, req.body);
+      await Movie.updateOne({ _id: req.params.id }, req.body);
       res.sendStatus(200);
     } catch (err) {
       res.status(422).send(err.message);
@@ -46,7 +44,7 @@ class MovieController {
 
   async delete(req, res) {
     try {
-      await this.Movie.deleteOne({ _id: req.params.id });
+      await Movie.deleteOne({ _id: req.params.id });
       res.sendStatus(204);
     } catch (err) {
       res.status(400).send(err.message);
@@ -54,4 +52,4 @@ class MovieController {
   }
 }
 
-export default MovieController;
+export default new MovieController();
